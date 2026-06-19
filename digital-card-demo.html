@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>David Rynhoud — LINKey Digital Card</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      background: linear-gradient(135deg, #1E272E 0%, #2D3436 100%);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    .card {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 40px 30px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.1);
+      margin-top: 30px;
+    }
+    .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #00BFA5;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      font-weight: 700;
+      border: 4px solid rgba(255,255,255,0.2);
+    }
+    h1 { font-family: 'Syne', sans-serif; font-size: 26px; margin-bottom: 5px; }
+    .title { color: #00BFA5; font-size: 16px; margin-bottom: 8px; font-weight: 600; }
+    .company { color: rgba(255,255,255,0.6); font-size: 14px; margin-bottom: 25px; }
+    .verified {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0,191,165,0.2);
+      color: #00BFA5;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 25px;
+    }
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Syne', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .btn-primary { background: #00BFA5; color: white; }
+    .btn-secondary { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
+    .btn:hover { transform: translateY(-2px); }
+    .contact-info {
+      text-align: left;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      color: rgba(255,255,255,0.8);
+      font-size: 15px;
+    }
+    .contact-row span { color: #00BFA5; font-size: 20px; }
+    .qr-section {
+      margin-top: 25px;
+      padding-top: 25px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .qr-placeholder {
+      width: 180px;
+      height: 180px;
+      background: white;
+      border-radius: 16px;
+      margin: 15px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #2D3436;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      color: rgba(255,255,255,0.4);
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="avatar">DR</div>
+    <h1>David Rynhoud</h1>
+    <div class="title">Founder & CEO</div>
+    <div class="company">LINKey Digital</div>
+    <div class="verified">✓ Verified Identity</div>
+
+    <div class="actions">
+      <button class="btn btn-primary">📇 Save to Contacts</button>
+      <button class="btn btn-secondary">💬 WhatsApp</button>
+      <button class="btn btn-secondary">🔗 Share Card</button>
+    </div>
+
+    <div class="contact-info">
+      <div class="contact-row"><span>📱</span> +27 82 123 4567</div>
+      <div class="contact-row"><span>✉️</span> david@linkey.co.za</div>
+      <div class="contact-row"><span>🌐</span> www.linkey.co.za</div>
+      <div class="contact-row"><span>📍</span> Ballito, KZN, South Africa</div>
+    </div>
+
+    <div class="qr-section">
+      <p style="color: rgba(255,255,255,0.6); font-size: 14px;">Scan to connect</p>
+      <div class="qr-placeholder">QR CODE</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Powered by LINKey</p>
+    <p style="margin-top: 8px;">The Missing Link</p>
+  </div>
+</body>
+</html>
