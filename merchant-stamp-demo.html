@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LINKey Merchant — Stamp Card</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      background: #F5F6FA;
+      color: #2D3436;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .logo {
+      width: 60px;
+      height: 60px;
+      background: #00BFA5;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      font-size: 28px;
+      color: white;
+    }
+    h1 { font-family: 'Syne', sans-serif; font-size: 24px; margin-bottom: 5px; }
+    .business-name { color: #00BFA5; font-weight: 600; }
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+    .member-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+    }
+    .avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #00BFA5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .member-details h2 { font-size: 18px; margin-bottom: 4px; }
+    .member-details p { color: #888; font-size: 14px; }
+    .stamps {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 25px 0;
+      flex-wrap: wrap;
+    }
+    .stamp {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 3px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: all 0.3s ease;
+    }
+    .stamp.active {
+      background: #00BFA5;
+      border-color: #00BFA5;
+      color: white;
+    }
+    .progress {
+      text-align: center;
+      margin: 20px 0;
+      font-size: 16px;
+      color: #666;
+    }
+    .progress strong { color: #00BFA5; font-size: 28px; }
+    .btn {
+      width: 100%;
+      padding: 18px;
+      border: none;
+      border-radius: 14px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: 'Syne', sans-serif;
+    }
+    .btn-stamp {
+      background: #00BFA5;
+      color: white;
+      margin-bottom: 12px;
+    }
+    .btn-redeem {
+      background: #FDCB6E;
+      color: #2D3436;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .history {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #888;
+      text-align: center;
+    }
+    .success {
+      background: #55EFC4;
+      color: #2D3436;
+      padding: 15px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: none;
+    }
+    @media (max-width: 480px) {
+      .card { padding: 20px; }
+      .stamp { width: 40px; height: 40px; font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">L</div>
+    <h1>LINKey Merchant</h1>
+    <p class="business-name">The Daily Brew — Ballito</p>
+  </div>
+
+  <div class="success" id="successMsg">Stamp added successfully!</div>
+
+  <div class="card">
+    <div class="member-info">
+      <div class="avatar">DR</div>
+      <div class="member-details">
+        <h2>David Rynhoud</h2>
+        <p>Member since June 2026</p>
+      </div>
+    </div>
+
+    <div class="progress">
+      <strong id="stampCount">3</strong> / 10 stamps
+    </div>
+
+    <div class="stamps" id="stampContainer">
+      <div class="stamp active">★</div>
+      <div class="stamp active">★</div>
+      <div class="stamp active">★</div>
+      <div class="stamp">☆</div>
+      <div class="stamp">☆</div>
+      <div class="stamp">☆</div>
+      <div class="stamp">☆</div>
+      <div class="stamp">☆</div>
+      <div class="stamp">☆</div>
+      <div class="stamp">☆</div>
+    </div>
+
+    <button class="btn btn-stamp" id="stampBtn" onclick="addStamp()">ADD STAMP</button>
+    <button class="btn btn-redeem" id="redeemBtn" onclick="redeemReward()" disabled>REDEEM REWARD</button>
+
+    <div class="history">
+      Last visit: Today at 09:15<br>
+      Total visits: 12
+    </div>
+  </div>
+
+  <script>
+    let currentStamps = 3;
+    const stampCap = 10;
+
+    function addStamp() {
+      if (currentStamps >= stampCap) return;
+      
+      currentStamps++;
+      updateDisplay();
+      
+      const msg = document.getElementById('successMsg');
+      msg.style.display = 'block';
+      msg.textContent = `Stamp ${currentStamps} of ${stampCap} added!`;
+      setTimeout(() => msg.style.display = 'none', 2000);
+      
+      localStorage.setItem('demo_stamps', currentStamps);
+    }
+
+    function redeemReward() {
+      if (currentStamps < stampCap) return;
+      alert('Reward redeemed! Stamps reset to 0.');
+      currentStamps = 0;
+      updateDisplay();
+      localStorage.setItem('demo_stamps', 0);
+    }
+
+    function updateDisplay() {
+      document.getElementById('stampCount').textContent = currentStamps;
+      
+      const stamps = document.querySelectorAll('.stamp');
+      stamps.forEach((s, i) => {
+        if (i < currentStamps) {
+          s.classList.add('active');
+          s.textContent = '★';
+        } else {
+          s.classList.remove('active');
+          s.textContent = '☆';
+        }
+      });
+      
+      document.getElementById('redeemBtn').disabled = currentStamps < stampCap;
+    }
+
+    const saved = localStorage.getItem('demo_stamps');
+    if (saved !== null) {
+      currentStamps = parseInt(saved);
+      updateDisplay();
+    }
+  </script>
+</body>
+</html>
