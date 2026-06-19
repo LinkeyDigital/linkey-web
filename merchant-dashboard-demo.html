@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LINKey Merchant Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      background: #F5F6FA;
+      color: #2D3436;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .logo {
+      width: 50px;
+      height: 50px;
+      background: #00BFA5;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+      font-size: 24px;
+      color: white;
+    }
+    h1 { font-family: 'Syne', sans-serif; font-size: 22px; }
+    .business-name { color: #00BFA5; font-weight: 600; font-size: 14px; }
+
+    .reward-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+    .tab {
+      padding: 10px 16px;
+      border-radius: 20px;
+      border: 2px solid #e0e0e0;
+      background: white;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .tab.active {
+      background: #00BFA5;
+      color: white;
+      border-color: #00BFA5;
+    }
+    .tab:hover { border-color: #00BFA5; }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 25px;
+      max-width: 420px;
+      margin: 0 auto 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .member-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+    .avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #00BFA5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .member-details h2 { font-size: 16px; }
+    .member-details p { color: #888; font-size: 13px; }
+
+    .progress {
+      text-align: center;
+      margin: 15px 0;
+      font-size: 15px;
+      color: #666;
+    }
+    .progress strong { color: #00BFA5; font-size: 24px; }
+
+    .stamps {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .stamp {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 3px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+    .stamp.active {
+      background: #00BFA5;
+      border-color: #00BFA5;
+      color: white;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Syne', sans-serif;
+      margin-bottom: 10px;
+    }
+    .btn-stamp { background: #00BFA5; color: white; }
+    .btn-redeem { background: #FDCB6E; color: #2D3436; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .reward-type-badge {
+      display: inline-block;
+      background: #FDCB6E;
+      color: #2D3436;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .hidden { display: none; }
+
+    .tier-box {
+      background: #1E272E;
+      color: white;
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      margin: 15px 0;
+    }
+    .tier-name { font-size: 20px; font-weight: 700; color: #FDCB6E; }
+    .tier-benefit { font-size: 14px; margin-top: 8px; color: rgba(255,255,255,0.8); }
+
+    .spend-bar {
+      height: 20px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 15px 0;
+    }
+    .spend-fill {
+      height: 100%;
+      background: #00BFA5;
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+
+    .success {
+      background: #55EFC4;
+      color: #2D3436;
+      padding: 12px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 18px; }
+      .stamp { width: 38px; height: 38px; font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">L</div>
+    <h1>LINKey Merchant</h1>
+    <p class="business-name">The Daily Brew — Ballito</p>
+  </div>
+
+  <div class="reward-tabs">
+    <div class="tab active" onclick="switchReward('stamp')">☕ Stamp Card</div>
+    <div class="tab" onclick="switchReward('visit')">🔄 Visit Counter</div>
+    <div class="tab" onclick="switchReward('spend')">💰 Spend & Save</div>
+    <div class="tab" onclick="switchReward('tier')">🏆 Tiers</div>
+  </div>
+
+  <div class="success" id="successMsg">Action completed!</div>
+
+  <!-- STAMP CARD -->
+  <div id="stamp-card" class="reward-section">
+    <div class="card">
+      <span class="reward-type-badge">STAMP CARD</span>
+      <div class="member-info">
+        <div class="avatar">DR</div>
+        <div class="member-details">
+          <h2>David Rynhoud</h2>
+          <p>Member since June 2026</p>
+        </div>
+      </div>
+      <div class="progress">
+        <strong id="stampCount">3</strong> / 10 stamps
+      </div>
+      <div class="stamps" id="stampContainer">
+        <div class="stamp active">★</div><div class="stamp active">★</div><div class="stamp active">★</div>
+        <div class="stamp">☆</div><div class="stamp">☆</div><div class="stamp">☆</div>
+        <div class="stamp">☆</div><div class="stamp">☆</div><div class="stamp">☆</div><div class="stamp">☆</div>
+      </div>
+      <button class="btn btn-stamp" onclick="addStamp()">ADD STAMP</button>
+      <button class="btn btn-redeem" id="redeemBtn" onclick="redeemReward()" disabled>REDEEM FREE COFFEE</button>
+    </div>
+  </div>
+
+  <!-- VISIT COUNTER -->
+  <div id="visit-card" class="reward-section hidden">
+    <div class="card">
+      <span class="reward-type-badge">VISIT COUNTER</span>
+      <div class="member-info">
+        <div class="avatar">DR</div>
+        <div class="member-details">
+          <h2>David Rynhoud</h2>
+          <p>3 visits this month</p>
+        </div>
+      </div>
+      <div class="progress">
+        <strong id="visitCount">3</strong> / 5 visits
+      </div>
+      <p style="text-align:center; color:#888; font-size:14px; margin:15px 0;">Next visit = FREE COFFEE</p>
+      <button class="btn btn-stamp" onclick="addVisit()">CHECK IN VISIT</button>
+      <button class="btn btn-redeem" id="visitRedeemBtn" onclick="redeemVisit()" disabled>REDEEM FREE COFFEE</button>
+    </div>
+  </div>
+
+  <!-- SPEND THRESHOLD -->
+  <div id="spend-card" class="reward-section hidden">
+    <div class="card">
+      <span class="reward-type-badge">SPEND & SAVE</span>
+      <div class="member-info">
+        <div class="avatar">DR</div>
+        <div class="member-details">
+          <h2>David Rynhoud</h2>
+          <p>Lifetime spend: R340</p>
+        </div>
+      </div>
+      <div class="progress">
+        <strong id="spendCount">R340</strong> / R500
+      </div>
+      <div class="spend-bar">
+        <div class="spend-fill" id="spendBar" style="width: 68%"></div>
+      </div>
+      <p style="text-align:center; color:#888; font-size:14px;">Spend R160 more = R50 off</p>
+      <button class="btn btn-stamp" onclick="addSpend()">ADD R50 SPEND</button>
+      <button class="btn btn-redeem" id="spendRedeemBtn" onclick="redeemSpend()" disabled>REDEEM R50 OFF</button>
+    </div>
+  </div>
+
+  <!-- TIERED MEMBER -->
+  <div id="tier-card" class="reward-section hidden">
+    <div class="card">
+      <span class="reward-type-badge">MEMBER TIER</span>
+      <div class="member-info">
+        <div class="avatar">DR</div>
+        <div class="member-details">
+          <h2>David Rynhoud</h2>
+          <p>12 total visits</p>
+        </div>
+      </div>
+      <div class="tier-box">
+        <div class="tier-name">🥈 SILVER MEMBER</div>
+        <div class="tier-benefit">10% off every purchase</div>
+      </div>
+      <p style="text-align:center; color:#666; font-size:14px; margin:10px 0;">8 more visits = <strong style="color:#FDCB6E">GOLD</strong> (20% off)</p>
+      <button class="btn btn-stamp" onclick="addTierVisit()">CHECK IN VISIT</button>
+    </div>
+  </div>
+
+  <script>
+    let currentStamps = 3, currentVisits = 3, currentSpend = 340;
+
+    function switchReward(type) {
+      document.querySelectorAll('.reward-section').forEach(s => s.classList.add('hidden'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      
+      document.getElementById(type + '-card').classList.remove('hidden');
+      event.target.classList.add('active');
+    }
+
+    function addStamp() {
+      if (currentStamps >= 10) return;
+      currentStamps++;
+      document.getElementById('stampCount').textContent = currentStamps;
+      const stamps = document.querySelectorAll('#stampContainer .stamp');
+      stamps.forEach((s, i) => {
+        if (i < currentStamps) { s.classList.add('active'); s.textContent = '★'; }
+      });
+      document.getElementById('redeemBtn').disabled = currentStamps < 10;
+      showSuccess(`Stamp ${currentStamps} added!`);
+    }
+
+    function redeemReward() {
+      if (currentStamps < 10) return;
+      showSuccess('Free coffee redeemed! ☕');
+      currentStamps = 0;
+      document.getElementById('stampCount').textContent = 0;
+      document.querySelectorAll('#stampContainer .stamp').forEach(s => { s.classList.remove('active'); s.textContent = '☆'; });
+      document.getElementById('redeemBtn').disabled = true;
+    }
+
+    function addVisit() {
+      if (currentVisits >= 5) return;
+      currentVisits++;
+      document.getElementById('visitCount').textContent = currentVisits;
+      document.getElementById('visitRedeemBtn').disabled = currentVisits < 5;
+      showSuccess(`Visit ${currentVisits} checked in!`);
+    }
+
+    function redeemVisit() {
+      showSuccess('Free coffee on next visit! ☕');
+      currentVisits = 0;
+      document.getElementById('visitCount').textContent = 0;
+      document.getElementById('visitRedeemBtn').disabled = true;
+    }
+
+    function addSpend() {
+      currentSpend += 50;
+      document.getElementById('spendCount').textContent = 'R' + currentSpend;
+      const pct = Math.min((currentSpend / 500) * 100, 100);
+      document.getElementById('spendBar').style.width = pct + '%';
+      document.getElementById('spendRedeemBtn').disabled = currentSpend < 500;
+      showSuccess('R50 spend added!');
+    }
+
+    function redeemSpend() {
+      showSuccess('R50 discount applied! 💰');
+      currentSpend = 0;
+      document.getElementById('spendCount').textContent = 'R0';
+      document.getElementById('spendBar').style.width = '0%';
+      document.getElementById('spendRedeemBtn').disabled = true;
+    }
+
+    function addTierVisit() {
+      showSuccess('Visit logged! 7 more to Gold.');
+    }
+
+    function showSuccess(msg) {
+      const el = document.getElementById('successMsg');
+      el.textContent = msg;
+      el.style.display = 'block';
+      setTimeout(() => el.style.display = 'none', 2000);
+    }
+  </script>
+</body>
+</html>
